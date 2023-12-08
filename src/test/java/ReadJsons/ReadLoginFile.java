@@ -5,6 +5,7 @@ import org.testng.annotations.*;
 
 import java.io.*;
 
+
 /**
  * @author Nandkumar Babar
  */
@@ -16,7 +17,5 @@ public class ReadLoginFile {
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
         System.out.println(requestBody);
-
-
     }
 }
