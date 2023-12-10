@@ -18,17 +18,13 @@ public class ReadSampleJson {
 
         JSONObject js = new JSONObject(requestBody);
 
-        //Get the value of age
-        String age = js.getJSONArray("sales").getJSONObject(1).get("age").toString();
-        System.out.println(age);
+        //To get the KL rahul's ipl team name
+        String teamName = js.getJSONArray("groupB").getJSONObject(0).get("team").toString();
+        System.out.println(teamName);
 
-        //Get the value from the accounting
-        String firstName = js.getJSONArray("accounting").getJSONObject(0).get("firstName").toString();
-        System.out.println(firstName);
-
-        //Get the accounting value from index 1
-        String indexOne = js.getJSONArray("accounting").getJSONObject(1).toString();
-        System.out.println(indexOne);
+        //To get the rcb team details
+        String rcbDetails = js.getJSONArray("groupA").getJSONObject(0).toString();
+        System.out.println(rcbDetails);
 
     }
 }
