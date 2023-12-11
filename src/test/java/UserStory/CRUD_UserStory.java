@@ -3,6 +3,7 @@ package UserStory;
 import io.restassured.*;
 import io.restassured.http.*;
 import io.restassured.response.*;
+import org.json.*;
 import org.json.simple.parser.*;
 import org.testng.annotations.*;
 
@@ -28,7 +29,12 @@ public class CRUD_UserStory {
                 .then().extract().response();
 
         System.out.println(response.getStatusCode()); // to get the status code
-
         System.out.println(response.asString()); // to get the response
+
+        //To travel the json
+        JSONObject js = new JSONObject(response.asString());
+
+
+
     }
 }
