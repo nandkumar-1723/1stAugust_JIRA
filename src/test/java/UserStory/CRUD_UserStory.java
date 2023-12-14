@@ -43,7 +43,7 @@ public class CRUD_UserStory {
     @Test(priority = 2)
     public void createUserStory() throws IOException, ParseException {
 
-        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/createUserStory.json");
+        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/userStory.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
@@ -64,8 +64,51 @@ public class CRUD_UserStory {
 
     @Test(priority = 3)
     public void getUserStory() {
-        System.out.println(issueID);
+
+        Response response = RestAssured.given().baseUri("http://localhost:9009")
+                .contentType(ContentType.JSON)
+                .header("Cookie", cookieValue).when()
+                .get("/rest/api/2/issue/" + issueID + "")
+                .then().extract().response();
+
+        System.out.println(response.getStatusCode());
+        System.out.println(response.asString());
 
     }
 
+    @Test(priority = 4)
+    public void updateUserStory() throws IOException, ParseException {
+
+        //Updated body
+        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/userStory.json");
+        JSONParser jp = new JSONParser();
+        String requestBody = jp.parse(fr).toString();
+
+        JSONObject js = new JSONObject(requestBody);
+        js.getJSONObject("fields").put("summary", "Updating the user story for 14th Dec");
+
+        //Update User story
+        Response response = RestAssured.given().baseUri("http://localhost:9009").body(js.toString())
+                .contentType(ContentType.JSON).header("Cookie", cookieValue)
+                .when().put("/rest/api/2/issue/" + issueID + "")
+                .then().extract().response();
+
+        System.out.println(response.asString());
+        System.out.println(response.getStatusCode());
+
+    }
+
+    @Test(priority = 5)
+    public void getUpdatedUserStory() {
+
+        Response response = RestAssured.given().baseUri("http://localhost:9009")
+                .contentType(ContentType.JSON)
+                .header("Cookie", cookieValue).when()
+                .get("/rest/api/2/issue/" + issueID + "")
+                .then().extract().response();
+
+        System.out.println(response.getStatusCode());
+        System.out.println(response.asString());
+
+    }
 }

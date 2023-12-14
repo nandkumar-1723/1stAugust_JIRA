@@ -11,7 +11,7 @@ import java.io.*;
 public class ReadSpecificKey {
     public static void main(String[] args) throws IOException, ParseException {
 
-        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/createUserStory.json");
+        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/userStory.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
         System.out.println(requestBody);
