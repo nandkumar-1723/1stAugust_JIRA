@@ -1,4 +1,4 @@
-package UserStory;
+package TestCases;
 
 import io.restassured.*;
 import io.restassured.http.*;
@@ -109,6 +109,17 @@ public class CRUD_UserStory {
 
         System.out.println(response.getStatusCode());
         System.out.println(response.asString());
+
+    }
+
+    @Test(priority = 6)
+    public void deleteUserStory(){
+
+        Response response = RestAssured.given().baseUri("http://localhost:9009").contentType(ContentType.JSON)
+                .header("Cookie", cookieValue).when().delete("/rest/api/2/issue/"+issueID+"")
+                .then().extract().response();
+
+        System.out.println(response.getStatusCode());
 
     }
 }
