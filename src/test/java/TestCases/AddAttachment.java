@@ -8,6 +8,7 @@ import org.json.simple.parser.*;
 import org.testng.annotations.*;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * @author Nandkumar Babar
@@ -16,16 +17,24 @@ public class AddAttachment {
 
     String cookieValue;
     String issueID;
+    private String url;
 
     @Test(priority = 1)
     public void loginJira() throws IOException, ParseException {
+        //Get the URL
+        FileReader propfile = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/credentials.properties");
+        Properties prop = new Properties();
+        prop.load(propfile);
+        url = prop.getProperty("url");
+
+
         // to get the request body
         FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/loginJira.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
         //All methods comes from rest assured class.
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON)
                 .when().post("/rest/auth/1/session")
                 .then().extract().response();
@@ -48,7 +57,7 @@ public class AddAttachment {
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON).header("Cookie", cookieValue).when().post("/rest/api/2/issue")
                 .then().extract().response();
 
@@ -68,7 +77,7 @@ public class AddAttachment {
 
         File attachment = new File("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/Attachment.png");
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").contentType(ContentType.MULTIPART)
+        Response response = RestAssured.given().baseUri(url).contentType(ContentType.MULTIPART)
                 .header("Cookie", cookieValue).header("X-Atlassian-Token", "no-check")
                 .multiPart("file", attachment).when().post("/rest/api/2/issue/"+issueID+"/attachments")
                 .then().log().all().extract().response();

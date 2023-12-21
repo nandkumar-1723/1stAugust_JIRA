@@ -8,6 +8,7 @@ import org.json.simple.parser.*;
 import org.testng.annotations.*;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * @author Nandkumar Babar
@@ -15,16 +16,23 @@ import java.io.*;
 public class CRUD_UserStory {
     String cookieValue;
     String issueID;
+    private String url;
 
     @Test(priority = 1)
     public void loginJira() throws IOException, ParseException {
+        //to get the url
+        FileReader propfile = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/credentials.properties");
+        Properties prop = new Properties();
+        prop.load(propfile);
+        url = prop.getProperty("url");
+        
         // to get the request body
         FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/loginJira.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
         //All methods comes from rest assured class.
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON)
                 .when().post("/rest/auth/1/session")
                 .then().extract().response();
@@ -47,7 +55,7 @@ public class CRUD_UserStory {
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON).header("Cookie", cookieValue).when().post("/rest/api/2/issue")
                 .then().extract().response();
 
@@ -65,7 +73,7 @@ public class CRUD_UserStory {
     @Test(priority = 3)
     public void getUserStory() {
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009")
+        Response response = RestAssured.given().baseUri(url)
                 .contentType(ContentType.JSON)
                 .header("Cookie", cookieValue).when()
                 .get("/rest/api/2/issue/" + issueID + "")
@@ -88,7 +96,7 @@ public class CRUD_UserStory {
         js.getJSONObject("fields").put("summary", "Updating the user story for 14th Dec");
 
         //Update User story
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(js.toString())
+        Response response = RestAssured.given().baseUri(url).body(js.toString())
                 .contentType(ContentType.JSON).header("Cookie", cookieValue)
                 .when().put("/rest/api/2/issue/" + issueID + "")
                 .then().extract().response();
@@ -101,7 +109,7 @@ public class CRUD_UserStory {
     @Test(priority = 5)
     public void getUpdatedUserStory() {
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009")
+        Response response = RestAssured.given().baseUri(url)
                 .contentType(ContentType.JSON)
                 .header("Cookie", cookieValue).when()
                 .get("/rest/api/2/issue/" + issueID + "")
@@ -115,7 +123,7 @@ public class CRUD_UserStory {
     @Test(priority = 6)
     public void deleteUserStory(){
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").contentType(ContentType.JSON)
+        Response response = RestAssured.given().baseUri(url).contentType(ContentType.JSON)
                 .header("Cookie", cookieValue).when().delete("/rest/api/2/issue/"+issueID+"")
                 .then().extract().response();
 

@@ -1,4 +1,4 @@
-package ReadJsons;
+package ReadFiles;
 
 import org.json.*;
 import org.json.simple.parser.*;
@@ -12,7 +12,7 @@ public class ReadSampleJson {
 
     public static void main(String[] args) throws IOException, ParseException {
 
-        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/sample.json");
+        FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/Files/sample.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
@@ -25,6 +25,11 @@ public class ReadSampleJson {
         //To get the rcb team details
         String rcbDetails = js.getJSONArray("groupA").getJSONObject(0).toString();
         System.out.println(rcbDetails);
+
+        //to get the no of arrays
+        JSONArray noOfArrays = js.getJSONArray("groupA");
+        System.out.println(noOfArrays.length());
+
 
     }
 }

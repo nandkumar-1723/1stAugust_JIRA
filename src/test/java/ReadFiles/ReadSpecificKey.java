@@ -1,4 +1,4 @@
-package ReadJsons;
+package ReadFiles;
 
 import org.json.*;
 import org.json.simple.parser.*;

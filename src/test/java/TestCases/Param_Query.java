@@ -17,15 +17,21 @@ import java.util.*;
 public class Param_Query {
     private String cookieValue;
     private String issueID;
+    private String url;
 
     @Test(priority = 1)
     public void loginJira() throws Exception {
-
+            //to get the URL
+        FileReader propfile = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/credentials.properties");
+        Properties prop = new Properties();
+        prop.load(propfile);
+        url = prop.getProperty("url");
+        
         FileReader fr = new FileReader("/home/nandkumar/Videos/1stAugust_JIRA/src/main/java/JsonFiles/loginJira.json");
         JSONParser jp = new JSONParser();
         String requestBody = jp.parse(fr).toString();
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON).when().post("/rest/auth/1/session")
                 .then().log().all().extract().response();
         Assert.assertEquals(response.statusCode(),200);
@@ -42,7 +48,7 @@ public class Param_Query {
         String requestBody = jp.parse(fr).toString();
 
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").body(requestBody)
+        Response response = RestAssured.given().baseUri(url).body(requestBody)
                 .contentType(ContentType.JSON).header("Cookie", cookieValue)
                 .when().post("/rest/api/2/issue").then().log().all().extract().response();
 
@@ -57,7 +63,7 @@ public class Param_Query {
     @Test(priority = 3)
     public void getBug(){
 
-        Response response = RestAssured.given().baseUri("http://localhost:9009").contentType(ContentType.JSON)
+        Response response = RestAssured.given().baseUri(url).contentType(ContentType.JSON)
                 .header("Cookie", cookieValue).queryParam("fields","priority").queryParam("fields","status").when().get("/rest/api/2/issue/"+issueID+"")
                 .then().log().all().extract().response();
 
